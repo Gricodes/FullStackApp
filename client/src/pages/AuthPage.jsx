@@ -1,30 +1,27 @@
 import React, {useState} from "react";
-import axios from 'axios';
 
-const AuthPage = () => {
+const AuthPage = props => {
+    console.log(props)
 
     const [form, setForm] = useState({
         email: '', password: ''
     })
 
+
+
+    // useEffect(() => {
+    //      // alert(props.error)
+    // }, [props.errors])
+
     const changeHandler = (e) => {
         setForm({...form, [e.target.name]: e.target.value})
     }
-
     const registerHandler = () => {
-        axios.post(`/api/auth/register`, {...form}).then(response => {
-            return response.data
-        })
+        props.registerThunk({...form})
     }
     const loginHandler = () => {
-        axios.post(`/api/auth/login`, {...form}).then(response => {
-            return response.data
-        })
+        props.loginThunk({...form})
     }
-    axios.get(`/api/auth/users`,{withCredentials:true}).then(response => {
-        console.log(response.data)
-        return response.data
-    })
 
     return (
         <div className='row'>
@@ -59,11 +56,13 @@ const AuthPage = () => {
                     <div className="card-action">
                         <button
                             className='btn yellow darken-4'
-                            onClick={loginHandler}> Войти
+                            onClick={loginHandler}
+                            disabled={props.loading}> Войти
                         </button>
                         <button
                             className='btn grey lighten-2 black-text'
-                            onClick={registerHandler}> Регистрироваться
+                            onClick={registerHandler}
+                            disabled={props.loading}> Регистрироваться
                         </button>
                     </div>
                 </div>

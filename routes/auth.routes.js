@@ -30,7 +30,7 @@ router.post(
             const candidate = await User.findOne({email})
 
             if (candidate) {
-                res.status(400).json({massage: "такой пользователь уже существует"})
+                res.status(400).json({message: "такой пользователь уже существует"})
             }
             const hashedPassword = await bcrypt.hash(password, 12)
 
@@ -69,12 +69,12 @@ router.post(
             const user = await User.findOne({email})
 
             if (!user) {
-                return res.status(400).json({massage: "пользователь не найден"})
+                return res.status(400).json({message: "пользователь не найден"})
             }
             const isMatch = await bcrypt.compare(password, user.password)
 
             if (!isMatch) {
-                return res.status(400).json({massage: "неправильный пароль"})
+                return res.status(400).json({message: "неправильный пароль"})
             }
 
             const token = jwt.sign(

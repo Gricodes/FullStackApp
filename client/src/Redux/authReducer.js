@@ -1,71 +1,83 @@
-import {stopSubmit} from "redux-form";
-import {authAPI} from "../../api/api";
+import {AuthPage} from "../api/api";
 
 let initialState = {
-    infoLogin: {
-        id: null,
-        login: null,
-        email: null,
-    },
-    isAuth: false,
-    captchaUrl : null
+    token: null,
+    userId: null,
+    message: null,
+    errors: null,
+    loading: false
 };
 
-export const setLoginAuthAC = (id, login, email, isAuth) => ({
-    type: 'SET_LOGIN_AUTH',
-    payload: {id: id, login: login, email: email},
-    isAuth: isAuth
+const registerAC = (payload) => ({
+    type: 'REGISTER_AUTH',
+    payload: {...payload},
 });
-export const getCaptchaAC = (url) => ({
-    type: 'GET_CAPTCHA',
-    payload: {url},
+const loginAC = (payload) => ({
+    type: 'LOGIN_AUTH',
+    payload: {...payload},
+});
+const loadingAC = (bool) => ({
+    type: 'LOADING',
+    payload: bool,
 });
 
 const auth = (state = initialState, action) => {
+
     switch (action.type) {
-        case "SET_LOGIN_AUTH":
+        case "REGISTER_AUTH":
+            if (action.payload.errors) {
+                let newError = action.payload.errors.find(i => i)
+                return {
+                    ...state,
+                    errors: newError.msg,
+                    message: null
+                };
+            }
             return {
                 ...state,
-                infoLogin: {...action.payload},
-                isAuth: action.isAuth
-            };
-        case "GET_CAPTCHA":
+                message: action.payload.message,
+                errors: null
+            }
+        case "LOGIN_AUTH":
+            if (action.payload.errors) {
+                let newError = action.payload.errors.find(i => i)
+                return {
+                    ...state,
+                    errors: newError.msg,
+                    message: null
+                }
+            }
             return {
                 ...state,
-                captchaUrl: action.payload
-            };
+                token: action.payload.token,
+                userId: action.payload.userId,
+                errors: null,
+                message: action.payload.message
+            }
+        case "LOADING":
+            return {
+                ...state,
+                loading: action.payload,
+                message: null,
+                errors: null,
+            }
         default:
             return state;
     }
 };
 
-export const authMeThunk = () => async (dispatch) => {
-    let data = await authAPI.authMeApi()
-    if (data.resultCode === 0) {
-        let {id, login, email} = {...data.data};
-        dispatch(setLoginAuthAC(id, login, email, true));
-    }
+export const registerThunk = (form) => async (dispatch) => {
+    dispatch(loadingAC(true))
+    let payload = await AuthPage.registerApi(form)
+    dispatch(registerAC(payload));
+    dispatch(loadingAC(false))
 };
-export const loginThunk = (email, password, rememberMe, captcha) => async (dispatch) => {
-    let data = await authAPI.loginApi(email, password, rememberMe, captcha);
-    if (data.resultCode === 0) {
-        dispatch(authMeThunk());
-    } else {
-        if (data.resultCode === 10){
-            dispatch(SecurityThunk())
-        }
-        dispatch(stopSubmit('login', {_error: data.messages.length > 0 ? data.messages[0] : 'Some is Wrong'}));
-    }
-};
-export const logOutThunk = () => async (dispatch) => {
-    let data = await authAPI.logOutApi()
-    if (data.resultCode === 0) {
-        dispatch(setLoginAuthAC(null, null, null, false));
-    }
-};
-export const SecurityThunk = () => async (dispatch) => {
-    let data = await authAPI.captchaApi()
-        dispatch(getCaptchaAC(data.url));
+
+export const loginThunk = (form) => async (dispatch) => {
+    dispatch(loadingAC(true))
+    let payload = await AuthPage.loginApi(form);
+    dispatch(loginAC(payload));
+    dispatch(loadingAC(false))
 };
 
 export default auth;
