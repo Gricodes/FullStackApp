@@ -54,7 +54,6 @@ router.post(
     ],
     async (req, res) => {
         try {
-
             const errors = validationResult(req)
 
             if (!errors.isEmpty()) {
@@ -83,25 +82,13 @@ router.post(
                 {expiresIn: "1h"}
             )
 
-            res.json({token, userId: user.id})
+            res.status(200).json({token, userId: user.id})
 
         } catch (e) {
             res.status(500).json({message: 'что-то пошло не так попробуйте снова '})
         }
     })
 
-router.get(
-    '/users',
-    async (req, res) => {
-        try {
-            const allArray = await User.find({})
-
-            res.send(allArray)
-
-        } catch (e) {
-            res.status(500).json({message: 'что-то пошло не так попробуйте снова '})
-        }
-    })
 
 
 module.exports = router

@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+
 export const AuthPage = {
     registerApi(form) {
         return (
@@ -20,6 +21,19 @@ export const AuthPage = {
                 if (error.response) {
                     return error.response.data;
                 }
+            })
+        )
+    },
+};
+export const CreatePage = {
+    generateApi(from, token) {
+        return (
+            axios.post(`/api/link/generate`, {from: from}, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then(response => {
+                return response.data
             })
         )
     },

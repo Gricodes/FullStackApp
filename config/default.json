@@ -1,5 +1,6 @@
 {
   "port": 5000,
   "mongoUri" : "mongodb+srv://narekgrig:1234qwer@cluster0.hetwk.azure.mongodb.net/app?retryWrites=true&w=majority",
-  "jwtSecret": "NarekMERNFirst"
+  "jwtSecret": "NarekMERNFirst",
+  "baseUrl": "http://localhost:5000"
 }

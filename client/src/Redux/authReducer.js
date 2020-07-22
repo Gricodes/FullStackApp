@@ -40,7 +40,7 @@ const auth = (state = initialState, action) => {
             }
         case "LOGIN_AUTH":
             if (action.payload.errors) {
-                let newError = action.payload.errors.find(i => i)
+                let newError = action.payload.errors.find(i => i).msg
                 return {
                     ...state,
                     errors: newError.msg,

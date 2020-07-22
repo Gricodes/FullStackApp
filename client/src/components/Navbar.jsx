@@ -6,17 +6,19 @@ const NavBar = (props) => {
         props.logOutFunc()
     }
     return (
+        <div className="row">
         <nav>
-            <div className="nav-wrapper">
-                <a href="#" className="brand-logo">React Logo</a>
+            <div className="nav-wrapper blue darken-2">
+                <span href="#" className="brand-logo" style={{paddingLeft:'10px'}}>M.E.R.N. Logo</span>
                 <ul id="nav-mobile" className="right hide-on-med-and-down">
                     <li><NavLink to="/create">Create</NavLink></li>
                     <li><NavLink to="/links">Links</NavLink></li>
                     <li><NavLink to="/detail/:id">Details</NavLink></li>
-                    <li><a href="/" onClick={logOutFunc} className='btn'> Log out</a></li>
+                    <li><a href="/" onClick={logOutFunc} className='waves-effect waves-light btn deep-orange accent-2'>Log out</a></li>
                 </ul>
             </div>
         </nav>
+        </div>
     )
 }
 export default NavBar

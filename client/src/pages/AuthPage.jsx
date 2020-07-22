@@ -1,17 +1,14 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 const AuthPage = props => {
-    console.log(props)
 
     const [form, setForm] = useState({
         email: '', password: ''
     })
 
-
-
-    // useEffect(() => {
-    //      // alert(props.error)
-    // }, [props.errors])
+    useEffect(() => {
+        window.M.updateTextFields()
+    }, [])
 
     const changeHandler = (e) => {
         setForm({...form, [e.target.name]: e.target.value})
@@ -27,7 +24,7 @@ const AuthPage = props => {
         <div className='row'>
             <div className='col s6 offset-s3'>
                 <h3> Сократит Ссылку </h3>
-                <div className="card blue darken-2">
+                <div className="card blue darken-1">
                     <div className="card-content white-text">
                         <span className="card-title">Авторизация</span>
                         <div>
