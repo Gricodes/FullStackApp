@@ -20,22 +20,26 @@ const UseAllReducer = props => {
                     <LinksPage/>
                 </Route>
                 <Route path="/create" exact>
-                    <CreatePage/>
+                    <CreatePage generateThunk={props.generateThunk} link={props.link} auth = {props.auth}/>
                 </Route>
-                <Route path="/detail/:id" exact>
-                    <DetailPage/>
+                <Route path="/detail/:myId" exact>
+                    <DetailPage getLinksIdThunk = {props.getLinksIdThunk}
+                                data = {props.data}
+                                link = {props.link}
+                    />
                 </Route>
                 <Redirect to="/create"/>
             </Switch>
         )
     }
-    return (
-        <Switch>
-            <Route path="/" exact>
-                <AuthPage  {...props} />
-            </Route>
-            <Redirect to="/"/>
-        </Switch>
-    )
+        return (
+            <Switch>
+                <Route path="/" exact>
+                    <AuthPage  {...props} />
+                </Route>
+                <Redirect to="/"/>
+            </Switch>
+        )
+
 }
 export default UseAllReducer

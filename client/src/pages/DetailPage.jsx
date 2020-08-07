@@ -1,6 +1,16 @@
-import React from "react";
+import React, {useEffect} from "react";
+import {useParams} from 'react-router-dom'
 
-const DetailPage = () => {
+const DetailPage = (props) => {
+    console.log(props.link)
+const linkId = useParams().myId // UseAllReducer DialogPage path="/detail/:myId"
+
+    const getLink = () => {
+        props.getLinksIdThunk(linkId,props.data.userToken)
+    }
+    useEffect(()=>{
+        getLink()
+    },[])
 
     return(
         <div>

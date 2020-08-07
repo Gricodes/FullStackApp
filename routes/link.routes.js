@@ -6,7 +6,6 @@ const authMiddleware = require('../middleware/auth.middleware')
 const router = Router()
 
 router.post('/generate', authMiddleware, async (req, res) => {
-
     try {
         const baseUrl = config.get('baseUrl')
         const {from} = req.body // const from = req.body.from
@@ -35,6 +34,7 @@ router.post('/generate', authMiddleware, async (req, res) => {
     }
 })
 router.get('/', authMiddleware, async (req, res) => {
+
     try {
         const links = await Link.find({owner: req.userDecodedToken.userId})
         res.status(200).json({links})
@@ -44,6 +44,7 @@ router.get('/', authMiddleware, async (req, res) => {
 })
 router.get('/:id', authMiddleware, async (req, res) => {
     try {
+        console.log(req)
         const linkByID = await Link.findById(req.params.id)
         res.status(200).json({linkByID})
     } catch (e) {

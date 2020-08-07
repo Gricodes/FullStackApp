@@ -9,16 +9,15 @@ module.exports = (req, res, next) => {
 
     try {
         const token = req.headers.authorization.split(' ')[1]
-
         if (!token) {
             return res.status(401).json({message: 'Вы не авторизованы'})
         }
 
         const decodedToken = jwt.verify(token, config.get('jwtSecret'))
-        console.log("DECODING ",decodedToken)
+
         req.userDecodedToken = decodedToken
         next()
     } catch (e) {
-        return res.status(401).json({message: 'Вы не авторизованы'})
+        return res.status(401).json({message: 'Вы не авторизованы asd'})
     }
 }

@@ -1,20 +1,22 @@
 import React, {useEffect, useState} from "react";
-import {compose} from "redux";
-import {withRouter, useHistory} from "react-router-dom";
-import {connect} from "react-redux";
-import {generateThunk} from "../Redux/createReducer";
+
+import {useHistory} from "react-router-dom";
+import Loader from "../loader/Loader";
+
 
 const CreatePage = (props) => {
-    let history = useHistory();
 
+    const history = useHistory();
     const data = JSON.parse(localStorage.getItem('storeData'))
 
     const [inputLink, setInputLink] = useState('')
+    const [ready, setReady] = useState(null)
 
     const pressSubmit = (event) => {
-
         if (event.key === 'Enter' && data) {
+            setReady(true)
             props.generateThunk(inputLink, data.userToken)
+            setInputLink('')
         }
     }
 
@@ -23,10 +25,10 @@ const CreatePage = (props) => {
     }, [])
 
     useEffect(() => {
-        if (props.link && props.link._id) {
-            history.push(`/detail/${props.link._id}`);
+        if (ready && props.link) {
+            history.push(`/detail/${props.link._id}`)
         }
-    }, [history, props.link])
+    }, [history, props.link, ready,props.auth])
 
     return (
         <div className="col s12">
@@ -45,14 +47,10 @@ const CreatePage = (props) => {
                     <label htmlFor="autocomplete-input">Add Link</label>
                 </div>
             </div>
+            {ready && <Loader/>}
         </div>
     )
 }
 
-const mapStateToProps = (state) => {
-    return {
-        link: state.createReducer.link
-    }
-}
 
-export default compose(withRouter, connect(mapStateToProps, {generateThunk}))(CreatePage);
+export default CreatePage;
